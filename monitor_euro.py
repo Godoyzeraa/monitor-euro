@@ -6,14 +6,29 @@ TELEGRAM_CHAT_ID = "SEU_CHAT_ID_AQUI"
 LIMITE_PRECO = 5.80  # Ajuste o valor máximo desejado
 
 def obter_cotacao_euro():
-    url = "https://economia.awesomeapi.com.br/last/EUR-BRL"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    }
+    
+    # 1ª Tentativa: AwesomeAPI com User-Agent
     try:
-        resposta = requests.get(url)
+        url = "https://economia.awesomeapi.com.br/last/EUR-BRL"
+        resposta = requests.get(url, headers=headers, timeout=10)
         resposta.raise_for_status()
         dados = resposta.json()
         return float(dados["EURBRL"]["bid"])
     except Exception as e:
-        print(f"Erro ao obter cotação: {e}")
+        print(f"AwesomeAPI falhou ({e}), tentando API alternativa...")
+
+    # 2ª Tentativa (Backup): ExchangeRate-API (Gratuita e sem limites de IP)
+    try:
+        url_alt = "https://open.er-api.com/v6/latest/EUR"
+        resposta = requests.get(url_alt, headers=headers, timeout=10)
+        resposta.raise_for_status()
+        dados = resposta.json()
+        return float(dados["rates"]["BRL"])
+    except Exception as e:
+        print(f"Erro ao obter cotação na API alternativa: {e}")
         return None
 
 def enviar_mensagem_telegram(mensagem):
@@ -43,3 +58,5 @@ if cotacao is not None:
             f"**Seu Limite:** R$ {LIMITE_PRECO:.2f}"
         )
         enviar_mensagem_telegram(mensagem)
+    else:
+        print(f"Euro (R$ {cotacao:.2f}) está acima do limite configurado (R$ {LIMITE_PRECO:.2f}). Nenhuma mensagem enviada.")
