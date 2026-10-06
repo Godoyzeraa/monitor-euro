@@ -1,8 +1,8 @@
 import requests
 
 # Credenciais e Configurações
-TELEGRAM_TOKEN = "SEU_TOKEN_AQUI"
-TELEGRAM_CHAT_ID = "SEU_CHAT_ID_AQUI"
+TELEGRAM_TOKEN = "8618451867:AAHK353F_M5YjibXg8kqyXPSL7H3OFC3dgw"
+TELEGRAM_CHAT_ID = "7751653069"
 LIMITE_PRECO = 6.00  # Ajuste o valor máximo desejado
 
 def obter_cotacao_euro():
