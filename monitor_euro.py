@@ -3,7 +3,7 @@ import requests
 # Credenciais e Configurações
 TELEGRAM_TOKEN = "SEU_TOKEN_AQUI"
 TELEGRAM_CHAT_ID = "SEU_CHAT_ID_AQUI"
-LIMITE_PRECO = 5.80  # Ajuste o valor máximo desejado
+LIMITE_PRECO = 6.00  # Ajuste o valor máximo desejado
 
 def obter_cotacao_euro():
     headers = {
