@@ -48,15 +48,18 @@ def enviar_mensagem_telegram(mensagem):
 # Execução única
 cotacao = obter_cotacao_euro()
 
-if cotacao is not None:
-    print(f"Cotação verificada: R$ {cotacao:.2f}")
-    if cotacao <= LIMITE_PRECO:
+if cotacao_comercial is not None:
+    # Calcula o valor aproximado cobrado pela AstroPay
+    cotacao_astropay = cotacao_comercial * MARGEM_ASTROPAY
+    
+    print(f"Comercial: R$ {cotacao_comercial:.2f} | Estimado AstroPay: R$ {cotacao_astropay:.2f}")
+    
+    if cotacao_comercial <= LIMITE_PRECO_COMERCIAL:
         mensagem = (
             f"🚨 *Alerta de Cotação do Euro!* 💶\n\n"
             f"O Euro baixou!\n"
-            f"**Cotação Atual:** R$ {cotacao:.2f}\n"
-            f"**Seu Limite:** R$ {LIMITE_PRECO:.2f}"
+            f"📊 *Comercial:* R$ {cotacao_comercial:.2f}\n"
+            f"💳 *Estimado na AstroPay:* R$ {cotacao_astropay:.2f}\n"
+            f"🎯 *Seu Limite:* R$ {LIMITE_PRECO_COMERCIAL:.2f}"
         )
         enviar_mensagem_telegram(mensagem)
-    else:
-        print(f"Euro (R$ {cotacao:.2f}) está acima do limite configurado (R$ {LIMITE_PRECO:.2f}). Nenhuma mensagem enviada.")
